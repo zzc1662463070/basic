@@ -1,0 +1,159 @@
+<section id="content">
+    <div class="page page-fullwidth-layout">
+        <div class="pageheader">
+            <h2>{$data.module_name}</h2>
+            <div class="page-bar">
+                <ul class="page-breadcrumb">
+                    <li>
+                        <a href="{:url('/admin')}"><i class="fa fa-home"></i> 起始页</a>
+                    </li>
+                    <li>
+                        <a href="{:url($data.module_url)}">{$data.module_name}统计</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- page content -->
+        <div class="pagecontent">
+            <!-- row -->
+            <div class="row">
+                <!-- col -->
+                <div class="col-md-12">
+                    <!-- tile -->
+                    <section class="tile">
+                        <!-- tile header -->
+                        <div class="tile-header dvd dvd-btm">
+                            <h1 class="custom-font"><strong>展示</strong>统计</h1>
+                            <!--<ul class="controls">-->
+                                <!--<li><a href="{:url($data.module_url.'create')}"><i class="fa fa-plus mr-5"></i> 新增</a></li>-->
+                            <!--</ul>-->
+                        </div>
+                        <!-- /tile header -->
+                        <!-- tile body -->
+                        <div class="tile-body">
+                           <div class="alert alert-info" style="display:none;">显示一些提示信息</div>
+                            <form action="{:url('record/searchrecord')}" method="get">
+                                <div class="table-responsive">
+                                    <div class="form-group" style="float: left;width: 120px;">
+                                        <label>开始时间</label>
+                                        <input type="text" class="form-control layui-input start" style="width: 120px" id="start_time" name="start_time" placeholder="选择开始时间">
+                                    </div>
+                                    <div class="form-group" style="float: left;width:120px;margin-left: 20px;">
+                                        <label>结束时间</label>
+                                        <input type="text" class="form-control layui-input end" style="width: 120px" id="end_time" name="end_time" placeholder="选择结束时间">
+                                    </div>
+                                    <div class="form-group" style="float: left;width:120px;margin-left: 20px;">
+                                        <label>广告id</label>
+                                        <input type="text"  class="form-control layui-input gid" style="width: 120px" id="g_id" name="g_id" placeholder="广告id">
+                                    </div>
+                                    <div class="form-group" style="float: left;width:120px;margin: 24px 30px 0px 30px;">
+                                        <input type="submit" value="搜索" class="btn btn-glyphicon-search">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-custom" id="products-list">
+                                    <thead>
+                                        <tr>
+                                            <!--<th>userip</th>-->
+                                            <th >广告计划ID</th>
+                                            <th >广告计划名称</th>
+                                            <th>广告ID</th>
+                                            <th >广告名称</th>
+                                            <th >次数</th>
+                                            <th>记录类型</th>
+                                            <th>访问时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <?php foreach($list as $key =>$value):?>
+
+                                                <td style="width: 120px;display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><?=$value['plan_id']?></td>
+                                                <td ><?=$value['planname']?></td>
+                                                <td style="overflow: hidden;"><?=$value['g_id']?></td>
+                                                <td style="overflow: hidden;"><?=$value['g_name']?></td>
+                                                <td style="overflow: hidden;"><?=$value['num']?></td>
+                                                <td style="overflow: hidden;"><?=$value['type']==1?"展示":"点击"?></td>
+                                                <td style="overflow: hidden;"><?=date('Y-m-d H:i:s',$value['time'])?></td>
+                                            </tr>
+                                    <?php endforeach;?>
+
+                                    </tbody>
+                                </table>
+                                <div class="text-center">{$page}</div>
+                            </div>
+                        </div>
+                        <!-- /tile body -->
+                    </section>
+                    <!-- /tile -->
+                </div>
+                <!-- /col -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /page content -->
+    </div>
+</section>
+<!--/ CONTENT -->
+<script>
+    laydate.render({
+        elem: '#start_time', //指定元素
+//            format: 'YYYY/MM/DD',
+//            istime: false, //是否显示分钟
+//            istoday: true //是否显示今天
+    });
+    laydate.render({
+        elem: '#end_time', //指定元素
+    });
+    $('.btn').click(function () {
+        var start = $('.start').val();
+        var end = $('.end').val();
+        var gid = $('.gid').val();
+        if(end < start){
+            layer.msg('起始时间必须小于结束时间');
+            return false;
+        }
+        if(!end || !start){
+            layer.msg('选择完整时间段');
+            return false;
+        }
+        if(!gid){
+            layer.msg('请选择广告进行查询');
+            return false;
+        }
+    });
+
+    function deleteData(id){
+        $.ajax({
+            type:"POST",
+            url:"{:url($data.module_url.'delete')}/"+id,
+            success:function(data){
+                if(data.error == 0){
+                    $('#tr_'+data.id).remove();
+                }
+                $('.alert').html(data.msg).show();
+                setTimeout(function() {
+                    $('.alert').hide();
+                }, 3000);
+            }
+        });
+    }
+    function updateExpireTime(id){
+        $.ajax({
+            type:"POST",
+            url:"{:url($data.module_url.'update_expire_time')}/"+id,
+            success:function(data){
+                if(data.error == 0){
+                    $('#tr_'+data.id+' .expire_time').html(data.expire_time);
+                }
+                $('.alert').html(data.msg).show();
+                setTimeout(function() {
+                    $('.alert').hide();
+                }, 3000);
+            }
+        });
+    }
+</script>
+
+

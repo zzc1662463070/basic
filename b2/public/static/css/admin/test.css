@@ -1,0 +1,11 @@
+.form-group{width: 300px}
+input[type=radio] {
+    margin-right: 20px;
+    vertical-align: -2px;
+}
+.choose{
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 148px;
+    border-radius: 4px;
+}

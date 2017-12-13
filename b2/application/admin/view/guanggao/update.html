@@ -1,0 +1,120 @@
+<section id="content">
+
+    <div class="page page-fullwidth-layout">
+
+        <div class="pageheader">
+
+            <h2>{$data.module_name}</h2>
+
+            <div class="page-bar">
+
+                <ul class="page-breadcrumb">
+                    <li>
+                        <a href="{:url('/admin')}"><i class="fa fa-home"></i> 起始页</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void 0">广告</a>
+                    </li>
+                    <li>
+                        修改广告
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+        <form action="{:url('/admin/guanggao/edit')}?g_id={$g_id}" method="post" enctype="multipart/form-data">
+            广告名称
+            <input type="text" name="name" class="form-control" value="{$g_name}"><br>
+            广告类型  <br><br>
+            <input type="hidden" value="{$type}" name="type">
+            图片<input type="radio" id="img_1" name="typ"  value="2" disabled {$type==2?"checked":""}> <br>
+            文字<input type="radio"  id="txt_1" name="typ"  value="1" disabled {$type==1?"checked":""}><br><br>
+
+
+            开启状态  <br><br>
+            <label  >开<input type="radio" name="status"  value="开" checked> </label><br>
+            <label >关<input type="radio" name="status"  value="关"></label><br><br>
+            广告描述
+            <input type="text" name="info" class="form-control" value="{$g_info}"><br><br>
+            <span id="txt_a" style="display: block"> 广告计划
+        <input type="text" name="plan_id" class="form-control " value="{$plan_id}" readonly ><br><br>
+       </span>
+            广告链接<br><br>
+            <label onclick="fun_3()"> 手动<input type="radio" name="aa"  value="手动" checked> </label><br>
+            <label onclick="fun_4()">上传<input type="radio" name="aa"  value="上传"></label><br><br>
+            安卓广告链接 <input id="shoudong1" type="text" name="lianjie_A" class="form-control" value="<?=$g_lianjie_A?>"><br>
+            <input id="shangchuan1" type="file" name="lianjie_A"  style="display: none"><br>
+
+
+            <label onclick="fun_5()"> 手动<input type="radio" name="aa1"  value="手动" checked> </label><br>
+            <label onclick="fun_6()">上传<input type="radio" name="aa1"  value="上传"></label><br><br>
+            苹果广告链接<input id="shoudong2" type="text" name="lianjie_I" class="form-control" value="<?=$g_lianjie_I?>"><br>
+
+            <input id="shangchuan2" type="file" name="lianjie_I"  style="display: none"><br>
+
+        <span id="img_a" style="display: none">
+            上传图片
+            <input type="file" name="pic" value=""  ><br><br>
+        </span>
+            <button type="submit" class="btn cke_btn_over">提交</button>
+        </form>
+
+    </div>
+
+    <input type="hidden" value="{$type}" id="type_1">
+    <script>
+
+        function fun_1() {
+            var img = document.getElementById('img_a');
+
+            if($("#type_1").val()==2){
+                img.style.display="block";
+            }else {
+                img.style.display="none";
+            }
+        }
+        fun_1();
+//        function fun_1() {
+//            var txt = document.getElementById('txt_a')
+//            var img = document.getElementById('img_a')
+//            txt.style.display="block";
+//            img.style.display="none";
+//        }
+//        function fun_2() {
+//            var txt = document.getElementById('txt_a')
+//            var img = document.getElementById('img_a')
+////            txt.style.display="none";
+//            img.style.display="block";
+//        }
+
+        function fun_3() {
+            var shoudong1 = document.getElementById('shoudong1')
+
+            var shangchuan1 = document.getElementById('shangchuan1')
+            shoudong1.style.display="block";
+            shangchuan1.style.display="none";
+        }
+        function fun_4() {
+            var shoudong1 = document.getElementById('shoudong1')
+            var shangchuan1 = document.getElementById('shangchuan1')
+            shoudong1.style.display="none";
+            shangchuan1.style.display="block";
+        }
+        function fun_5() {
+            var shoudong2 = document.getElementById('shoudong2')
+
+            var shangchuan2 = document.getElementById('shangchuan2')
+            shoudong2.style.display="block";
+            shangchuan2.style.display="none";
+        }
+        function fun_6() {
+            var shoudong2 = document.getElementById('shoudong2')
+            var shangchuan2 = document.getElementById('shangchuan2')
+            shoudong2.style.display="none";
+            shangchuan2.style.display="block";
+        }
+    </script>
+</section>
+<!--/ CONTENT -->

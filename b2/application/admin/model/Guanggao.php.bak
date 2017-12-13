@@ -1,0 +1,111 @@
+<?php
+namespace app\admin\model;
+use app\admin\model\Plan;
+use think\Db;
+use think\Model;
+
+class Guanggao extends Model
+{
+
+    // 设置完整的数据表（包含前缀）
+    protected $table = 'guanggao';
+
+//
+//    // 关闭自动写入时间戳
+//    //protected $autoWriteTimestamp = false;
+//
+//    //默认时间格式
+//    protected $dateFormat = 'Y-m-d H:i:s';
+//
+//    protected $type       = [
+//        // 设置时间戳类型（整型）
+//        'create_time'     => 'timestamp',
+//        'update_time'     => 'timestamp',
+//        'last_login_time' => 'timestamp',
+//        'expire_time' => 'timestamp',
+//
+//    ];
+//
+//    //自动完成
+//    protected $insert = [
+//        'create_time',
+//        'update_time',
+//    ];
+//
+//    protected $update = ['update_time'];
+//
+//    // 属性修改器
+//    protected function setCreateTimeAttr($value, $data)
+//    {
+//        return time();
+//    }
+//
+//    // 属性修改器
+//    protected function setUpdateTimeAttr($value, $data)
+//    {
+//        return time();
+//    }
+//
+//    // 属性修改器
+//    protected function setLastLoginTimeAttr($value, $data)
+//    {
+//        return time();
+//    }
+//
+//    protected function getLastLoginTimeAttr($datetime)
+//    {
+//        return date('Y-m-d H:i:s', $datetime);
+//    }
+//
+//    protected function setExpireTimeAttr($value, $data)
+//    {
+//        return time();
+//    }
+//    protected function getExpireTimeAttr($datetime)
+//    {
+//        return date('Y-m-d H:i:s', $datetime);
+//    }
+//
+//    // status属性读取器
+//    protected function getStatusAttr($value)
+//    {
+//        $status = [-1 => '删除', 0 => '禁用', 1 => '正常', 2 => '待审核'];
+//        return $status[$value];
+//    }
+   static function corejs($plan_id){
+//       $attt =  Db::table('guanggao')->where('plan_id',$plan_id)->select();;
+//       return $attt;
+//       exit;
+       $planname = Db::table('plan')->where('plan_id',$plan_id)->value('name');
+       $plantype = Db::table('plan')->where('plan_id',$plan_id)->value("type");
+       //获取计划下的所有广告
+       $planinfodata  = Db::table('guanggao')->where('plan_id',$plan_id)->select();
+
+
+
+      /* $js_header = " document.writeln(\"<script type='text/javascript'>\");
+                             ";*/
+       /*$js_footer =" document.writeln(\"</script>\");";*/
+       $uploadUrl = $_SERVER['HTTP_HOST']."/basic/public/static";
+       $js_info="";
+       if($plantype==1){
+           foreach ($planinfodata as $key=>$value){
+               $js_info .="document.writeln('<p>$planname</p>');
+                        document.writeln('<p> ".$value['g_name']."</p>');
+                        document.writeln( '<a class=\"dVo39\" href=\'http://".$value['g_lianjie']."\'>".$value['g_info']."</a>');";
+           }
+
+       }else{
+           foreach ($planinfodata as $key=>$value){
+               $js_info .="document.writeln('<p>$planname</p>');
+                          document.writeln('<p> ".$value['g_name']."</p>');
+                        document.writeln( '<a class=\"dVo39\" href=\'http://".$value['g_lianjie']."\'> <img src=\"http://$uploadUrl/img/" .$value['picname']." \"  onclick=\"onskip(".$value['g_id'].")\"></a>');";
+           }
+       }
+
+
+       file_put_contents("public/static/planjs/$plan_id.js",$js_info);
+
+   }
+
+}

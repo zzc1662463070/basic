@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="__PUBLIC__/home/js/jquery-1.7.2.min.js"></script>
+</head>
+<body>
+<script>
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)
+        return  (r[2]); return null;
+    }
+
+    document.writeln("<style>");
+    document.writeln(".bottomAD{-webkit-box-sizing:border-box;;z-index:1000;padding:0 0px;overflow:hidden;width:100%}.dVo39{z-index:2147483647!important;width:22px;height:20px;background:rgba(0,0,0,0.1);text-align:center;color:red;font-size:17px;line-height:20px;font-family:Arial}");
+    document.writeln("</style>");
+    document.writeln("<div class=\"bottomAD\" id=\"bottomAD\">");
+    var type = GetQueryString('type');
+    var name = decodeURI(GetQueryString('name'));
+    var info = decodeURI(GetQueryString('info'));
+    var link =  GetQueryString('url');
+    var tag = link.split('.');
+
+    if(tag[tag.length-1]!="com"&&tag[tag.length-1]!="cn"){
+        var url =  "__PUBLIC__/img/" + link;
+    }
+    else{
+        alert(link);
+        var url = 'http://'+  link;
+    }
+    var gid = GetQueryString('gid');
+    if(type == 1){
+        document.writeln('<a class="dVo39" href="'+ url + '" onclick="onskip(' + gid + ')">' + name +'</a>');
+        document.writeln('<p>' + info +'</p>');
+    }
+    else
+    {
+        var img = GetQueryString('img');
+        document.writeln('<p>' + name +'</p>');
+        document.writeln('<p>' + info +'</p>');
+        document.writeln( '<a class="dVo39" href="'+ url + '"><img src="__PUBLIC__/img/' + img + '"  onclick="onskip(' + gid + ')"></a>');
+    }
+    document.writeln("</div>");
+
+    function onskip(g_id) {
+        $.post(
+            "{:url('index/ajax1')}",
+            {
+                g_id:g_id
+            },
+            function (msg) {
+            }
+            ,"json")
+    }
+</script>
+
+</body>
+</html>
